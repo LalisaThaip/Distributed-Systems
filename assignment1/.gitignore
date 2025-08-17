@@ -1,27 +1,52 @@
+# ========================
 # IntelliJ IDEA
+# ========================
 /.idea/
-/*.iml
+*.iml
+
+# Compiled output directories
 /out/
 /target/
 
+# ========================
 # Maven wrapper (optional)
+# ========================
 !.mvn/wrapper/maven-wrapper.jar
 
+# ========================
 # VS Code
+# ========================
 .vscode/
 
+# ========================
 # Mac OS
+# ========================
 .DS_Store
 
-# Eclipse (optional if someone uses Eclipse)
-/.classpath
-/.project
-/.settings/
-/bin/
+# ========================
+# Eclipse (optional)
+# ========================
+.classpath
+.project
+.settings/
+bin/
 
+# ========================
 # NetBeans (optional)
+# ========================
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
+
+# ========================
+# Keep source and test files only
+# ========================
+# Include your src and pom/README
+!src/main/java/
+!src/test/java/
+!pom.xml
+!README.md
+
+git rm --cached -r *.class
