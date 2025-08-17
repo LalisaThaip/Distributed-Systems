@@ -157,4 +157,58 @@ public class CalculatorTest {
         // Shutdown executor service
         executor.shutdown();
     }
+
+    /**
+     * New multi-client scenario:
+     * - Client 1 pushes a value
+     * - Client 2 pushes another value
+     * - Client 3 performs an operation (MIN) on the shared stack
+     * This tests shared stack consistency across multiple clients.
+     */
+    @Test
+    public void testSharedStackMultiClientOperation() throws InterruptedException, ExecutionException {
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        // Client 1 pushes 15
+        Runnable client1 = () -> {
+            try {
+                Calculator c = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+                c.pushValue(15);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        };
+
+        // Client 2 pushes 25
+        Runnable client2 = () -> {
+            try {
+                Calculator c = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+                c.pushValue(25);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        };
+
+        // Client 3 performs MIN operation
+        Callable<Integer> client3 = () -> {
+            try {
+                Calculator c = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+                c.pushOperation("min"); // Should compute min of 15 and 25
+                return c.pop();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        };
+
+        // Execute clients concurrently
+        executor.submit(client1);
+        executor.submit(client2);
+        Future<Integer> result3 = executor.submit(client3);
+
+        // Wait for MIN result
+        int minResult = result3.get();
+        assertEquals(15, minResult, "MIN operation should return 15, the smallest pushed value.");
+
+        executor.shutdown();
+    }
 }
