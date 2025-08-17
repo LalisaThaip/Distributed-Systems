@@ -3,8 +3,19 @@ import java.rmi.RemoteException;
 import java.util.Scanner;
 import java.rmi.NotBoundException;
 
-/* The Client class is used to test the Calculator RMI service
- * pushValue, pushOperation, pop, delayPop, getLastResult methods are used here
+/**
+ * This class connects to the Calculator RMI server and provides
+ * a user interface to test calculator operations.
+ * 
+ * Responsibilities:
+ * 1. Connect to the remote Calculator object via RMI
+ * 2. Provide menu options for pushing values, popping values,
+ *    performing operations (min, max, gcd, lcm), and delayed pop
+ * 3. Display results to the user
+ * 
+ * Notes:
+ * - Make sure the server is running before starting the client.
+ * - This client is interactive and uses Scanner for input.
  */
 
 public class CalculatorClient {
@@ -19,8 +30,10 @@ public class CalculatorClient {
             System.out.print("===== Connected to Calculator RMI server! =====\n");
 
             boolean running = true;
-            // give the user choices for operations
+            
+            // main loop to accept user commands
             while (running) {
+                // Display menu options
                 System.out.println("Calculator options: ");
                 System.out.println("1. push value");
                 System.out.println("2. Pop value");
@@ -83,7 +96,7 @@ public class CalculatorClient {
                         break;
 
 
-                    case 8: // Exit
+                    case 8: // Exit the client
                         running = false;
                         System.out.println("Exiting Calculator Client...");
                         break;
@@ -95,6 +108,7 @@ public class CalculatorClient {
             scan.close();
 
         } catch (Exception e) {
+            // Catch all exceptions including RemoteException and NotBoundException
             e.printStackTrace();
         }
     }
