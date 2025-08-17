@@ -11,6 +11,7 @@ This project implements a Remote Calculator using Java RMI, allowing multiple cl
 - JUnit tests for automated verification#
 
 ## Project Structure
+```
 assignment1/
 │
 ├─ src/
@@ -24,6 +25,7 @@ assignment1/
 │
 ├─ pom.xml
 └─ README.md
+```
 
 ## Prerequisites 
 - Java 17 or later
