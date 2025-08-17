@@ -16,6 +16,7 @@ public class CalculatorImplementation extends UnicastRemoteObject implements Cal
         lastResult = 0;
     }
 
+    @Override
     public int getLastResult() throws RemoteException {
         return lastResult;
     }

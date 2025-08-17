@@ -3,8 +3,8 @@ import java.rmi.RemoteException;
 
 // method abstraction for remote calculator
 public interface Calculator extends Remote{
-    // get value from client
-    //int getValue() throws RemoteException;
+    // get the last value from the stack without modifying it
+    int getLastResult() throws RemoteException;
 
     // pushes an integer value onto the server's stack
     void pushValue(int value) throws RemoteException;
