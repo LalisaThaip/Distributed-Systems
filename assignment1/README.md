@@ -49,7 +49,12 @@ Open a new terminal and start RMI registry on port 1099:
 ```bash
 rmiregistry 1099 &
 ```
-Note: Ensure no other process is using port 1099. Use lsof -i :1099 and kill -9 <PID> if needed.
+Note: Ensure no other process is using port 1099. 
+Use if needed to clear port 1099:
+```bash
+lsof -i :1099
+kill -9 <PID>
+```
 
 ### 3. Launch the Calculator Server
 In a new terminal:
@@ -63,6 +68,7 @@ Calculator Server running ...
 ### 4. Run the Client Calculator Server
 Open another terminal and run:
 ```bash
+cd assignment1/src/main/java
 java CalculatorClient
 ```
 Client provides a menu to:
@@ -79,6 +85,7 @@ Client provides a menu to:
 ### 5. Simulate Multiple Clients
 Open multiple terminals and run the client in each
 ```bash
+cd assignment1/src/main/java
 java CalculatorClient
 ```
 Note: All clients interact with the same shared stack on the server. Always ensure the server is running first 
@@ -92,6 +99,7 @@ Run tests with Maven:
 ```bash
 mvn test
 ```
+Note: please do not edit the pom.xml file as it is use for testing
 
 Tests included:
 - Single client push/pop and operations

@@ -1,29 +1,27 @@
-### IntelliJ IDEA ###
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+# IntelliJ IDEA
+/.idea/
+/*.iml
+/out/
+/target/
 
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+# Maven wrapper (optional)
+!.mvn/wrapper/maven-wrapper.jar
 
-### NetBeans ###
+# VS Code
+.vscode/
+
+# Mac OS
+.DS_Store
+
+# Eclipse (optional if someone uses Eclipse)
+/.classpath
+/.project
+/.settings/
+/bin/
+
+# NetBeans (optional)
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-
-### VS Code ###
-.vscode/
-
-### Mac OS ###
-.DS_Store
