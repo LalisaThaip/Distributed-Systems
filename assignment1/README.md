@@ -47,9 +47,6 @@ javac *.java
 
 ### 2. Start the RMI Registry
 
-Open a new terminal and start RMI registry on port 1099:
-```bash
-rmiregistry 1099 &
 ```
 Note: Ensure no other process is using port 1099. 
 Use if needed to clear port 1099:
