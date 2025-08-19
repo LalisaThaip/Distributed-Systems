@@ -1,4 +1,5 @@
 import java.rmi.Naming;
+import java.rmi.RemoteException;
 import java.util.Scanner;
 
 /**
@@ -53,6 +54,7 @@ public class CalculatorClient {
                         System.out.println("Value pushed: " + value);
                         break;
                     case 2: // Pop value
+
                         if (!calculator.isEmpty()) {
                             int popped = calculator.pop();
                             System.out.println("Popped value: " + popped);
@@ -87,12 +89,16 @@ public class CalculatorClient {
                         break;
 
                     case 7: // Delay Pop
-                        System.out.print("Enter delay in milliseconds: ");
-                        int millis = scan.nextInt();
-                        int delayedPop = calculator.delayPop(millis);
-                        System.out.println("Delayed pop result: " + delayedPop);
-                        break;
+                        try {
+                            System.out.print("Enter delay in milliseconds: ");
+                            int millis = scan.nextInt();
+                            int delayedPop = calculator.delayPop(millis);
+                            System.out.println("Delayed pop result: " + delayedPop);
 
+                        } catch (RemoteException e) {
+                            System.out.println("Stack is empty!");
+                        }
+                        break;
 
                     case 8: // Exit the client
                         running = false;
@@ -106,8 +112,6 @@ public class CalculatorClient {
             scan.close();
 
         } catch (Exception e) {
-            // Catch all exceptions including RemoteException and NotBoundException
-            e.printStackTrace();
         }
     }
 }
