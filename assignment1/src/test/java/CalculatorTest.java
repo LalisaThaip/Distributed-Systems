@@ -2,6 +2,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.util.concurrent.*;
 
 /**
@@ -20,7 +21,18 @@ public class CalculatorTest {
      */
     @BeforeAll
     public static void setup() throws Exception {
-        calculator = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+        try {
+            LocateRegistry.createRegistry(1099); 
+        } catch (Exception e){}
+
+        try {
+            calculator = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+        } catch (Exception e ) {
+            CalculatorImplementation impl = new CalculatorImplementation();
+            Naming.rebind("rmi://localhost:1099/calc", impl);
+            calculator = impl; 
+        }
+
     }
 
     /**
@@ -109,9 +121,8 @@ public class CalculatorTest {
         // Client 1: push 10, then pop
         Callable<Integer> client1 = () -> {
             try {
-                Calculator c = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
-                c.pushValue(10);
-                return c.pop();
+                calculator.pushValue(10);
+                return calculator.pop();
             } catch (RemoteException e) {
                 throw new RuntimeException(e); // wrap checked exception
             }
@@ -120,9 +131,8 @@ public class CalculatorTest {
         // Client 2: push 20, then pop
         Callable<Integer> client2 = () -> {
             try {
-                Calculator c = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
-                c.pushValue(20);
-                return c.pop();
+                calculator.pushValue(20);
+                return calculator.pop();
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
@@ -131,9 +141,8 @@ public class CalculatorTest {
         // Client 3: push 30, then pop
         Callable<Integer> client3 = () -> {
             try {
-                Calculator c = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
-                c.pushValue(30);
-                return c.pop();
+                calculator.pushValue(30);
+                return calculator.pop();
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
@@ -174,7 +183,7 @@ public class CalculatorTest {
             try {
                 Calculator c = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
                 c.pushValue(15);
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         };
@@ -184,7 +193,7 @@ public class CalculatorTest {
             try {
                 Calculator c = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
                 c.pushValue(25);
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         };
