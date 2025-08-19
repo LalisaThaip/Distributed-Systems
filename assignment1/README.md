@@ -55,7 +55,7 @@ lsof -i :1099
 kill -9 <PID>
 ```
 
-### 3. Launch the Calculator Server
+### 3. Run the Calculator Server
 
 In a new terminal:
 ```bash
@@ -67,7 +67,7 @@ Calculator Server running ...
 
 ### 4. Run the Client
 
-Open another terminal and run:
+In another new terminal run:
 ```bash
 cd assignment1/src/main/java
 java CalculatorClient
@@ -98,10 +98,13 @@ There are 2 methods for testing the code to choose from: Using Makefile and manu
 
 #### Testing method 1: Maven
 
+Make sure the RMI server is running in a separate terminal **before** running the Maven tests.
+
 Navigate to the project root 
 ```bash
 cd assignment1
 ```
+
 Run tests with Maven:
 ```bash
 mvn test

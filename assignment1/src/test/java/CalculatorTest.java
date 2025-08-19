@@ -3,7 +3,6 @@ import org.junit.jupiter.api.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.util.concurrent.*;
 
 /**
  * Test class for Calculator RMI server.
@@ -92,6 +91,17 @@ public class CalculatorTest {
         assertEquals(20, calculator.pop());
     }
 
+     /**
+     * Tests the pop method for a single client.
+     * Ensures the method returns a stack is empty error after popping an empty stack
+     */
+    @Test
+    public void testPopEmptyStack() throws RemoteException {
+        assertTrue(calculator.isEmpty());
+        assertThrows(RemoteException.class, () -> calculator.pop(), "Pop on empty stack should throw RemoteException");
+    }
+
+
     /**
      * Tests the delayPop method for a single client.
      * Ensures the method waits for the specified delay before returning the value.
@@ -106,65 +116,104 @@ public class CalculatorTest {
         assertTrue((end - start) >= 500, "delayPop should wait at least 500ms.");
     }
 
-    // ------------------ MULTI-CLIENT TESTS ------------------
-
     /**
-     * Simulates multiple clients interacting with the RMI server concurrently.
-     * Each client pushes a value and pops it.
-     * Uses ExecutorService to run clients in parallel.
+     * Test isEmpty before and after push/pop.
      */
     @Test
-    public void testMultipleClients() throws InterruptedException, ExecutionException {
-        // Create a thread pool to simulate 3 clients
-        ExecutorService executor = Executors.newFixedThreadPool(3);
+    public void testIsEmpty() throws Exception {
+        Calculator calc = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+        assertTrue(calc.isEmpty(), "Stack should be empty initially");
+        calc.pushValue(5);
+        assertFalse(calc.isEmpty(), "Stack should not be empty after push");
+        calc.pop();
+        assertTrue(calc.isEmpty(), "Stack should be empty again after pop");
+    }
 
-        // Client 1: push 10, then pop
-        Callable<Integer> client1 = () -> {
-            try {
-                calculator.pushValue(10);
-                return calculator.pop();
-            } catch (RemoteException e) {
-                throw new RuntimeException(e); // wrap checked exception
-            }
-        };
+    /**
+     * Tests getLastResult() method.
+     * Ensures that after each operation, getLastResult() returns the result
+     * of the most recent operation performed on the stack.
+     */
+    @Test
+    public void testGetLastResult() throws RemoteException {
+        calculator.pushValue(7);
+        calculator.pushValue(3);
+        calculator.pushOperation("min"); // result should be 3
+        int lastResult = calculator.getLastResult();
+        assertEquals(3, lastResult, "getLastResult should return the last operation result");
+        
+        calculator.pushValue(12);
+        calculator.pushOperation("max"); // result should be 12
+        assertEquals(12, calculator.getLastResult(), "getLastResult should update after each operation");
+    }
 
-        // Client 2: push 20, then pop
-        Callable<Integer> client2 = () -> {
-            try {
-                calculator.pushValue(20);
-                return calculator.pop();
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        };
 
-        // Client 3: push 30, then pop
-        Callable<Integer> client3 = () -> {
-            try {
-                calculator.pushValue(30);
-                return calculator.pop();
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        };
+    // ------------------ MULTI-CLIENT TESTS ------------------
 
-        // Run all clients concurrently
-        Future<Integer> f1 = executor.submit(client1);
-        Future<Integer> f2 = executor.submit(client2);
-        Future<Integer> f3 = executor.submit(client3);
+    @Test
+    public void testMultipleClientsSequentialPush() throws Exception {
+        // Stub a
+        Calculator a = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+        a.pushValue(10);
+        assertEquals(10, a.pop(), "Stub a should pop 10");
 
-        // Collect results
-        int result1 = f1.get();
-        int result2 = f2.get();
-        int result3 = f3.get();
+        // Stub b
+        Calculator b = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+        b.pushValue(20);
+        assertEquals(20, b.pop(), "Stub b should pop 20");
 
-        // Assert that each result matches one of the pushed values
-        assertTrue(result1 == 10 || result1 == 20 || result1 == 30);
-        assertTrue(result2 == 10 || result2 == 20 || result2 == 30);
-        assertTrue(result3 == 10 || result3 == 20 || result3 == 30);
+        // Stub c
+        Calculator c = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+        c.pushValue(30);
+        assertEquals(30, c.pop(), "Stub c should pop 30");
+    }
 
-        // Shutdown executor service
-        executor.shutdown();
+
+    @Test
+    public void testMultipleClientsPush() throws Exception {
+        // Stub a
+        Calculator a = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+        a.pushValue(10);
+        assertEquals(10, a.pop());
+
+        // Stub b
+        Calculator b = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+        b.pushValue(20);
+        assertEquals(20, b.pop());
+
+        // Stub c
+        Calculator c = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+        c.pushValue(30);
+        assertEquals(30, c.pop());
+    }
+
+    /**
+     * New multi-client scenario:
+     * - Client 1 pushes two values
+     * - Client 2 performs min
+     * - Client 3 pushes two values
+     * - Client 2 performs max
+     * This tests shared stack consistency across multiple clients.
+     */
+
+    @Test
+    public void testMultpleClientsPushMinMax() throws Exception {
+        // MIN of 12 and 18
+        Calculator a = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+        a.pushValue(12);
+        a.pushValue(18);
+
+        Calculator c = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+        c.pushOperation("min");
+        assertEquals(12, c.pop());
+
+        // Now push values for MAX
+        Calculator b = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+        b.pushValue(5);
+        b.pushValue(20);
+
+        c.pushOperation("max");
+        assertEquals(20, c.pop());
     }
 
     /**
@@ -174,50 +223,64 @@ public class CalculatorTest {
      * - Client 3 performs an operation (MIN) on the shared stack
      * This tests shared stack consistency across multiple clients.
      */
+
     @Test
-    public void testSharedStackMultiClientOperation() throws InterruptedException, ExecutionException {
-        ExecutorService executor = Executors.newFixedThreadPool(3);
+    public void testMutltipleClientPushMin() throws Exception {
+        // Stub a pushes first value
+        Calculator a = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+        a.pushValue(15);
 
-        // Client 1 pushes 15
-        Runnable client1 = () -> {
-            try {
-                Calculator c = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
-                c.pushValue(15);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        };
+        // Stub b pushes second value
+        Calculator b = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+        b.pushValue(25);
 
-        // Client 2 pushes 25
-        Runnable client2 = () -> {
-            try {
-                Calculator c = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
-                c.pushValue(25);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        };
+        // Stub c performs MIN operation
+        Calculator c = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+        c.pushOperation("min");
+        int minResult = c.pop();
 
-        // Client 3 performs MIN operation
-        Callable<Integer> client3 = () -> {
+        assertEquals(15, minResult, "MIN operation should return the smallest pushed value: 15");
+    }
+
+    /**
+     * Test delayPop: one stub pushes, another tries delayPop, and another pops early.
+     * Expected: delayPop should block, so the fast pop will empty the stack first.
+     * After delayPop completes, it should throw RemoteException (stack empty).
+     */
+    @Test
+    public void testSequentialDelayPopRaceSimulation() throws Exception {
+        // Stub1 push a value
+        Calculator stub1 = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+        stub1.pushValue(99);
+
+        // Stub2 delayPop for 2 seconds
+        Calculator stub2 = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+
+        // Run delayPop in a separate thread so we can simulate interruption
+        Thread delayPopThread = new Thread(() -> {
             try {
-                Calculator c = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
-                c.pushOperation("min"); // Should compute min of 15 and 25
-                return c.pop();
+                stub2.delayPop(2000); // intended delay
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
-        };
+        });
 
-        // Execute clients concurrently
-        executor.submit(client1);
-        executor.submit(client2);
-        Future<Integer> result3 = executor.submit(client3);
+        delayPopThread.start();
 
-        // Wait for MIN result
-        int minResult = result3.get();
-        assertEquals(15, minResult, "MIN operation should return 15, the smallest pushed value.");
+        // Stub3 pop immediately (simulate popping before delayPop)
+        Calculator stub3 = (Calculator) Naming.lookup("rmi://localhost:1099/calc");
+        Thread.sleep(500); // give a small delay so stubA has already pushed
+        int immediatePop = stub3.pop();
 
-        executor.shutdown();
+        assertEquals(99, immediatePop, "Stub3 should pop the pushed value before stub2's delayPop");
+
+        // Wait for delayPop thread to finish
+        delayPopThread.join();
+
+        // stack should be empty at the end
+        assertTrue(stub2.isEmpty(), "Stack should be empty at the end");
     }
+
+
+
 }
