@@ -11,9 +11,6 @@ JAVAC=javac
 JAVA=java
 MVN=mvn
 
-# RMI registry port
-RMI_PORT=1099
-
 # Main classes
 SERVER_CLASS=CalculatorServer
 CLIENT_CLASS=CalculatorClient
@@ -34,11 +31,6 @@ test:
 	@echo "Running tests..."
 	$(MVN) test
 
-# Start RMI registry in background
-rmiregistry:
-	@echo "Starting RMI registry on port $(RMI_PORT)..."
-	rmiregistry $(RMI_PORT) &
-
 # Run the server
 server: compile
 	@echo "Starting Calculator Server..."
@@ -53,4 +45,3 @@ client: compile
 clean:
 	@echo "Cleaning compiled files..."
 	rm -rf $(OUT_DIR) $(TARGET_DIR)
-

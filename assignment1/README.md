@@ -83,6 +83,22 @@ Client provides a menu to:
 7. Delay pop operation for a specified number of milliseconds
 8. Exit the client server (Close the calculator application)
 
+Example usage:
+To push two values (55 and 66) onto the calculator stack and then MIN operation, you would enter in the terminal 
+```bash 
+#Choose an option (enter 1-8): 
+1 # this means you have chosen menu option 1 (Push a value)
+# You then see "Enter an integer to push: " 
+55 # this is the value you want to push and you will see a follow-up message "Value pushed: 55"
+
+1 # choice to push a value from menu option 1
+# You then see "Enter an integer to push: " 
+66
+
+3 # to perform the MIN operation from choice menu option 3
+```
+
+
 ### 5. Simulate Multiple Clients
 
 Open multiple terminals and run the client in each
@@ -122,6 +138,7 @@ mvn clean test
 
 
 #### Testing method 2: Makefile 
+Change your current directory to the directory containing the Makefile (should be directory 'assignment1' in this case)
 
 Start the server in one terminal:
 ``` bash
