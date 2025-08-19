@@ -1,7 +1,5 @@
 import java.rmi.Naming;
-import java.rmi.RemoteException;
 import java.util.Scanner;
-import java.rmi.NotBoundException;
 
 /**
  * This class connects to the Calculator RMI server and provides
