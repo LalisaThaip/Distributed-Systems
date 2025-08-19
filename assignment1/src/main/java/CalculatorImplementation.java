@@ -180,6 +180,7 @@ public class CalculatorImplementation extends UnicastRemoteObject implements Cal
             // pause execution for requested number of milliseconds
             Thread.sleep(millis);
         } catch (InterruptedException ignored) {}
+        
         if (stack.isEmpty()) {
             throw new RemoteException("Stack is empty");
         }
