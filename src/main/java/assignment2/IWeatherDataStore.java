@@ -62,5 +62,5 @@ public interface IWeatherDataStore {
      * Limits stored data to the most recent entries (e.g., 20 stations) (thread-safe).
      * @param maxSize Maximum number of entries to keep.
      */
-    void limitToRecent(int maxSize);
+    //void limitToRecent(int maxSize);
 }

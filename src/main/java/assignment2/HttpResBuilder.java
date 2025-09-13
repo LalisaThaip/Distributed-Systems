@@ -1,45 +1,53 @@
-import java.io.*;
+package assignment2;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 
-/** HttpResBuilder implementation for constructing and sending HTTP responses */
 public class HttpResBuilder implements IHttpResBuilder {
-    @Override 
-    public void sendResponse(Socket socket, int status, String body, long lamportClock) {
-        try {
-            String response = buildResponse(status, body, lamportClock);
-            OutputStream out = socket.getOutputStream();
-            out.write(response.getBytes());
-            out.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+    @Override
+    public void sendResponse(Socket socket, int status, String body, long lamportClock) throws IOException {
+        OutputStream os = socket.getOutputStream();
+        PrintWriter writer = new PrintWriter(os, true);
+        String response = buildResponse(status, body, lamportClock);
+        writer.println(response);
+        writer.flush();
     }
 
     @Override
     public String buildResponse(int status, String body, long lamportClock) {
-        String statusText;
+        String statusLine;
         switch (status) {
-            case 200: statusText = "OK"; break;
-            case 400: statusText = "Bad Request"; break;
-            case 404: statusText = "Not Found"; break;
-            case 500: statusText = "Internal Server Error"; break;
-            default: statusText = "Unknown";
-        };
-
-        return "HTTP/1.1 " + status + " " + statusText + "\r\n" +
-               "Content-Type: application/json\r\n" +
-               "Content-Length: " + body.length() + "\r\n" +
-               "Lamport-Clock: " + lamportClock + "\r\n" +
-               "\r\n" + body;
+            case 200: statusLine = "200 OK"; break;
+            case 201: statusLine = "201 Created"; break;
+            case 204: statusLine = "204 No Content"; break;
+            case 400: statusLine = "400 Bad Request"; break;
+            case 500: statusLine = "500 Internal Server Error"; break;
+            default: statusLine = "500 Internal Server Error";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("HTTP/1.1 ").append(statusLine).append("\n");
+        sb.append("Lamport-Clock: ").append(lamportClock).append("\n");
+        if (body != null && !body.isEmpty()) {
+            sb.append("Content-Type: application/json\n");
+            sb.append("Content-Length: ").append(body.length()).append("\n");
+            sb.append("\n");
+            sb.append(body);
+        } else {
+            sb.append("Content-Length: 0\n");
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 
-    @Override 
+    @Override
     public String parseBody(String response) {
-        int bodyStart = response.indexOf("\r\n\r\n");
+        int bodyStart = response.indexOf("\n\n");
         if (bodyStart != -1) {
-            return response.substring(bodyIndex + 4);
+            return response.substring(bodyStart + 2);
         }
         return "";
     }
-
 }

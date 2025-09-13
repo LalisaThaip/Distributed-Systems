@@ -1,107 +1,241 @@
-/** 
- * WeatherData represent the weather data structure ith JSOn perations 
- * 
- */
 package assignment2;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.reflect.TypeToken;
-import java.lang.reflect.Type;
 
- public class WeatherData implements IWeatherData {
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class WeatherData implements IWeatherData {
     private String id;
     private String name;
     private String state;
-    private String time_zone;
-    private long lat;
-    private long lon;
-    private String local_date_time;
-    private String local_date_time_full;
-    private double air_temp;
-    private double apparent_t;
+    private String timeZone;
+    private double lat;
+    private double lon;
+    private String localDateTime;
+    private String localDateTimeFull;
+    private double airTemp;
+    private double apparentT;
     private String cloud;
     private double dewpt;
     private double press;
-    private int rel_hum;
-    private String wind_dir;
-    private int wind_spd_kmh;
-    private int wind_spd_kt;    
-    private static final Gson gson = new GsonBuilder().create();
+    private int relHum;
+    private String windDir;
+    private int windSpdKmh;
+    private int windSpdKt;
 
+    private static final ObjectMapper mapper = new ObjectMapper();
 
-    // Getter and setter methods for each field 
-
-    public String getId() { return id; }
-    public String getName() { return name; }
-    public String getState() { return state; }
-    public String getTimeZone() { return time_zone; }
-    public long getLat() { return lat; }
-    public long getLon() { return lon; }
-    public String getLocalDateTime() { return local_date_time; }
-    public String getLocalDateTimeFull() { return local_date_time_full; }
-    public double getAirTemp() { return air_temp; }           
-    public double getApparentT() { return apparent_t; }
-    public String getCloud() { return cloud; }
-    public double getDewpt() { return dewpt; }
-    public double getPress() { return press; }
-    public int getRelHum() { return rel_hum; }
-    public String getWindDir() { return wind_dir; }
-    public int getWindSpdKmh() { return wind_spd_kmh; }
-    public int getWindSpdKt() { return wind_spd_kt; }
-
-
-    public void setId(String id) { this.id = id; }
-    public void setName(String name) { this.name = name; }
-    public void setState(String state) { this.state = state; }
-    public void setTimeZone(String time_zone) { this.time_zone = time_zone; }
-    public void setLat(long lat) { this.lat = lat; }
-    public void setLon(long lon) { this.lon = lon; }
-    public void setLocalDateTime(String local_date_time) { this.local_date_time = local_date_time; }
-    public void setLocalDateTimeFull(String local_date_time_full) { this.local_date_time_full = local_date_time_full; }
-    public void setAirTemp(double air_temp) { this.air_temp = air_temp; }           
-    public void setApparentT(double apparent_t) { this.apparent_t = apparent_t; }
-    public void setCloud(String cloud) { this.cloud = cloud; }
-    public void setDewpt(double dewpt) { this.dewpt = dewpt; }
-    public void setPress(double press) { this.press = press; }
-    public void setRelHum(int rel_hum) { this.rel_hum = rel_hum; }
-    public void setWindDir(String wind_dir) { this.wind_dir = wind_dir; }
-    public void setWindSpdKmh(int wind_spd_kmh) { this.wind_spd_kmh = wind_spd_kmh; } 
-    public void setWindSpdKt(int wind_spd_kt) { this.wind_spd_kt = wind_spd_kt; }
-
-
-    /** Converts Weather data */
-
-    /**
-     * converts weather data to JSON string
-     * @return JSON representation of weather data
-     */
-    public String toJson(){
-        return gson.toJson(this); 
+    @Override
+    public String getId() {
+        return id;
     }
 
-    /**
-     * creates WeatherData from JSON string
-     * @param json JSON string
-     * @return WeatherData object
-     */
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getState() {
+        return state;
+    }
+
+    @Override
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    @Override
+    public double getLat() {
+        return lat;
+    }
+
+    @Override
+    public double getLon() {
+        return lon;
+    }
+
+    @Override
+    public String getLocalDateTime() {
+        return localDateTime;
+    }
+
+    @Override
+    public String getLocalDateTimeFull() {
+        return localDateTimeFull;
+    }
+
+    @Override
+    public double getAirTemp() {
+        return airTemp;
+    }
+
+    @Override
+    public double getApparentT() {
+        return apparentT;
+    }
+
+    @Override
+    public String getCloud() {
+        return cloud;
+    }
+
+    @Override
+    public double getDewpt() {
+        return dewpt;
+    }
+
+    @Override
+    public double getPress() {
+        return press;
+    }
+
+    @Override
+    public int getRelHum() {
+        return relHum;
+    }
+
+    @Override
+    public String getWindDir() {
+        return windDir;
+    }
+
+    @Override
+    public int getWindSpdKmh() {
+        return windSpdKmh;
+    }
+
+    @Override
+    public int getWindSpdKt() {
+        return windSpdKt;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    @Override
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
+
+    @Override
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    @Override
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
+    @Override
+    public void setLocalDateTime(String localDateTime) {
+        this.localDateTime = localDateTime;
+    }
+
+    @Override
+    public void setLocalDateTimeFull(String localDateTimeFull) {
+        this.localDateTimeFull = localDateTimeFull;
+    }
+
+    @Override
+    public void setAirTemp(double airTemp) {
+        this.airTemp = airTemp;
+    }
+
+    @Override
+    public void setApparentT(double apparentT) {
+        this.apparentT = apparentT;
+    }
+
+    @Override
+    public void setCloud(String cloud) {
+        this.cloud = cloud;
+    }
+
+    @Override
+    public void setDewpt(double dewpt) {
+        this.dewpt = dewpt;
+    }
+
+    @Override
+    public void setPress(double press) {
+        this.press = press;
+    }
+
+    @Override
+    public void setRelHum(int relHum) {
+        this.relHum = relHum;
+    }
+
+    @Override
+    public void setWindDir(String windDir) {
+        this.windDir = windDir;
+    }
+
+    @Override
+    public void setWindSpdKmh(int windSpdKmh) {
+        this.windSpdKmh = windSpdKmh;
+    }
+
+    @Override
+    public void setWindSpdKt(int windSpdKt) {
+        this.windSpdKt = windSpdKt;
+    }
+
+    @Override
+    public String toJson() {
+        try {
+            return mapper.writeValueAsString(this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static WeatherData fromJson(String json) {
         try {
-            return gson.fromJson(json, WeatherData.class);
-        } catch (JsonSyntaxException e) {
-            throw new IllegalArgumentException("Invalid JSON: " + e.getMessage());
+            return mapper.readValue(json, WeatherData.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public static WeatherData[] fromJsonArray(String json) {
-        try {
-            Type listType = new TypeToken<WeatherData[]>() {}.getType();
-            WeatherData[] array = gson.fromJson(json, listType);
-            return array != null ? array : new WeatherData[0];
-        } catch (JsonSyntaxException e) {
-            throw new IllegalArgumentException("Invalid JSON array: " + e.getMessage());
-        }
+    // Override equals for verification
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        WeatherData other = (WeatherData) obj;
+        return id.equals(other.id) &&
+            (name == null ? other.name == null : name.equals(other.name)) &&
+            (state == null ? other.state == null : state.equals(other.state)) &&
+            (timeZone == null ? other.timeZone == null : timeZone.equals(other.timeZone)) &&
+            Double.compare(lat, other.lat) == 0 &&
+            Double.compare(lon, other.lon) == 0 &&
+            (localDateTime == null ? other.localDateTime == null : localDateTime.equals(other.localDateTime)) &&
+            (localDateTimeFull == null ? other.localDateTimeFull == null : localDateTimeFull.equals(other.localDateTimeFull)) &&
+            Double.compare(airTemp, other.airTemp) == 0 &&
+            Double.compare(apparentT, other.apparentT) == 0 &&
+            (cloud == null ? other.cloud == null : cloud.equals(other.cloud)) &&
+            Double.compare(dewpt, other.dewpt) == 0 &&
+            Double.compare(press, other.press) == 0 &&
+            relHum == other.relHum &&
+            (windDir == null ? other.windDir == null : windDir.equals(other.windDir)) &&
+            windSpdKmh == other.windSpdKmh &&
+            windSpdKt == other.windSpdKt;
     }
 }

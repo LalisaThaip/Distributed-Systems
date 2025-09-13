@@ -50,5 +50,11 @@ public interface IContentServer {
      */
     void verifyData(Socket socket, WeatherData data, String stationId) throws IOException;
 
+    
+    public int extractStatusCode(String response);
+
+    
+
+
      
 }

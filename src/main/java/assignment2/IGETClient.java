@@ -28,7 +28,7 @@ public interface IGETClient {
      * @param stationId The ID of the weather station to fetch data for. (optional)
      * @throws IOException if sending fails.
      */
-    void sendGetRequest(Socket socket, String serverUrl) throws IOException;
+    void sendGetRequest(Socket socket, String serverUrl, String stationId) throws IOException;
 
     /**
      * Displays weather data from the server response
@@ -56,6 +56,12 @@ public interface IGETClient {
      * @param url the URL string
      * @return The port number from the URL
      */
-    String extractPort(String url);
+    int extractPort(String url);
+
+    int extractStatusCode(String response);
+
+    String readResponse(Socket socket) throws IOException;
+
+    String parseBody(String response);
 
 }
