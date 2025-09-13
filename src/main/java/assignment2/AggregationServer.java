@@ -139,8 +139,8 @@ public class AggregationServer implements IAggregationServer {
                 } finally {
                     lock.unlock();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         } finally {
             // Ensure socket is closed
