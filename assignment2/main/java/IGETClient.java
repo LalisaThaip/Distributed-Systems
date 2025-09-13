@@ -6,7 +6,7 @@
  * handle errors gracefully and display appropriate messages
 
 */
-public interface GETClient {
+public interface IGETClient {
 
     /** 
      * Parses CLI arguments and initiates GET request with retries

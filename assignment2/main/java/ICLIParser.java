@@ -1,7 +1,7 @@
 /**
  * Interface for parsing and validating command-line arguments.
  */
-public interface CLIParser {
+public interface ICLIParser {
     /**
      * Parses server URL from command-line arguments.
      * @param args Command-line arguments.

@@ -5,7 +5,7 @@
  * handles errors gracefully and displays appropriate messages
  */
 
-public interface ContentServer {
+public interface IContentServer {
     
     /**
      * Parses CLI arguments and initiates PUT requests with retries

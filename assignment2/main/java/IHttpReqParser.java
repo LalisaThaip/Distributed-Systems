@@ -1,4 +1,4 @@
-public interface HttpReqParser {
+public interface IHttpReqParser {
     /** 
      * parses raw HTTP request from input stream
      * @param in Input stream from client socket

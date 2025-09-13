@@ -13,7 +13,7 @@
  * persist aggregated data to a json file via the put operation 
  */
 
- public interface WeatherDataStore {
+ public interface IWeatherDataStore {
 
    /**
     * stores weather data with a key 

@@ -1,7 +1,7 @@
 import hava.net.*;
 import java.io.*;;
 
-public interface HttpResBuilder {
+public interface IHttpResBuilder {
     /** 
      * constructs and sends an HTTP response 
      * @param socket client socket connection 
