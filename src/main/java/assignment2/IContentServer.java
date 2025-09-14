@@ -1,60 +1,40 @@
-/**
- * Reads and parses weather data from local file 
- * serves data to aggregation server via HTTP PUT requests
- * converts data to JSON format and sends PUT requests with lamport clock
- * handles errors gracefully and displays appropriate messages
- */
 package assignment2;
-import java.net.Socket;
+
 import java.io.IOException;
+import java.net.Socket;
 
+/**
+ * Interface for ContentServer, responsible for parsing weather data files,
+ * creating WeatherData objects, serializing to JSON, and sending to AggregationServer via PUT requests.
+ */
 public interface IContentServer {
-    
+
     /**
-     * Parses CLI arguments and initiates PUT requests with retries
-     * reads files
-     * @param args command-line arguments
+     * Parses a weather data file and creates a WeatherData object.
+     * @param filePath Path to the weather data file.
+     * @return WeatherData object or null if parsing fails.
      */
-    void main(String[] args);
+    WeatherData parseWeatherFile(String filePath);
 
-    /** 
-     * Parses input file into weatherData object
-     * @param filePath Path to input file
-     * @return Parsed weather data object
-     * @throws IOException if file reading fails.
-     */
-    WeatherData parseWeatherFile(String filePath) throws IOException;
-
-    /** 
-     * Constructs and Sends HTTP PUT request with Lamport clock
-     * Initiates a PUT request to the specified server URL with the given weather data
-     * @param socket Client socket connection
-     * @param data Weather data to send
-     * @throws IOException if sending fails.
+    /**
+     * Sends a PUT request with the serialized WeatherData JSON to the AggregationServer.
+     * @param socket Socket connected to the AggregationServer.
+     * @param data WeatherData object to send.
+     * @throws IOException If an I/O error occurs during the request.
      */
     void sendPutRequest(Socket socket, WeatherData data) throws IOException;
 
     /**
-     * Extracts and updates Lamport clock from response headers 
-     * @param response HTTP response from the server
-     * @return Updated Lamport clock value
+     * Updates the Lamport clock based on the server's response.
+     * @param response HTTP response from the AggregationServer.
+     * @return The received Lamport clock value.
      */
     long updateLamportClock(String response);
 
     /**
-     * Verifies data by sending GET request and comparing with sent data.
-     * @param socket Client socket connection.
-     * @param data Sent weather data.
-     * @param stationId Station ID to verify.
-     * @throws IOException if verification fails.
+     * Extracts the HTTP status code from the server's response.
+     * @param response HTTP response from the AggregationServer.
+     * @return The HTTP status code.
      */
-    void verifyData(Socket socket, WeatherData data, String stationId) throws IOException;
-
-    
-    public int extractStatusCode(String response);
-
-    
-
-
-     
+    int extractStatusCode(String response);
 }

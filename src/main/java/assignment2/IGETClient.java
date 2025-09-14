@@ -13,12 +13,6 @@ import java.io.IOException;
 
 public interface IGETClient {
 
-    /** 
-     * Parses CLI arguments and initiates GET request with retries
-     * @param args command-line arguments
-     */
-    void main(String[] args);
-
     /**
      * Constructs and sends GET request with Lamport clock 
      * Initiates a GET request to the specified server URL for the given station ID

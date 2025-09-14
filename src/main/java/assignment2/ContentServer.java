@@ -10,10 +10,22 @@ import java.util.Map;
 public class ContentServer implements IContentServer {
     private static long lamportClock = 0;
     private static final ObjectMapper mapper = new ObjectMapper();
-    private final ICLIParser cliParser = new CLIParser();
+    private static final ICLIParser cliParser = new CLIParser();
 
-    @Override
-    public void main(String[] args) {
+    public static void main(String[] args) {
+        ContentServer server = new ContentServer();
+        while (true) {
+            server.run(args);
+            try {  
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+    }
+
+    public void run(String args[]) {
         try {
             String serverUrl = cliParser.parseServerUrl(args);
             String filePath = cliParser.parseFilePath(args);
@@ -34,8 +46,7 @@ public class ContentServer implements IContentServer {
 
                 int status = extractStatusCode(response);
                 if (status == 200 || status == 201) {
-                    System.out.println("PUT successful.");
-                    verifyData(socket, data, data.getId());
+                    System.out.println("PUT successful with status: " + status);
                 } else {
                     System.out.println("PUT failed with status: " + status);
                 }
@@ -49,57 +60,12 @@ public class ContentServer implements IContentServer {
 
     @Override
     public WeatherData parseWeatherFile(String filePath) {
-        Map<String, Object> map = new HashMap<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.trim().isEmpty()) continue;
-                int colon = line.indexOf(':');
-                if (colon > 0) {
-                    String key = line.substring(0, colon).trim();
-                    String valueStr = line.substring(colon + 1).trim();
-                    Object value;
-                    try {
-                        value = Double.parseDouble(valueStr);
-                    } catch (NumberFormatException e) {
-                        try {
-                            value = Integer.parseInt(valueStr);
-                        } catch (NumberFormatException ex) {
-                            value = valueStr;
-                        }
-                    }
-                    map.put(key, value);
-                }
-            }
+        try {
+            return mapper.readValue(new File(filePath), WeatherData.class);
         } catch (IOException e) {
-            System.out.println("Error reading file: " + e.getMessage());
+            System.out.println("Error parsing weather file: " + e.getMessage());
             return null;
         }
-
-        if (!map.containsKey("id")) {
-            System.out.println("No id found in file.");
-            return null;
-        }
-
-        WeatherData data = new WeatherData();
-        data.setId((String) map.get("id"));
-        data.setName((String) map.get("name"));
-        data.setState((String) map.get("state"));
-        data.setTimeZone((String) map.get("time_zone"));
-        data.setLat(map.get("lat") instanceof Double ? (Double) map.get("lat") : ((Integer) map.get("lat")).doubleValue());
-        data.setLon(map.get("lon") instanceof Double ? (Double) map.get("lon") : ((Integer) map.get("lon")).doubleValue());
-        data.setLocalDateTime((String) map.get("local_date_time"));
-        data.setLocalDateTimeFull((String) map.get("local_date_time_full"));
-        data.setAirTemp((Double) map.get("air_temp"));
-        data.setApparentT((Double) map.get("apparent_t"));
-        data.setCloud((String) map.get("cloud"));
-        data.setDewpt((Double) map.get("dewpt"));
-        data.setPress((Double) map.get("press"));
-        data.setRelHum((Integer) map.get("rel_hum"));
-        data.setWindDir((String) map.get("wind_dir"));
-        data.setWindSpdKmh((Integer) map.get("wind_spd_kmh"));
-        data.setWindSpdKt((Integer) map.get("wind_spd_kt"));
-        return data;
     }
 
     @Override
@@ -108,7 +74,7 @@ public class ContentServer implements IContentServer {
         String json = data.toJson();
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         out.println("PUT /weather.json HTTP/1.1");
-        out.println("User-Agent: ATOMClient/1/0");
+        out.println("User-Agent: ContentServer/1.0");
         out.println("Content-Type: application/json");
         out.println("Content-Length: " + json.length());
         out.println("Lamport-Clock: " + lamportClock);
@@ -132,28 +98,6 @@ public class ContentServer implements IContentServer {
         return Integer.parseInt(firstLine.split(" ")[1]);
     }
 
-    public void verifyData(Socket socket, WeatherData sentData, String stationId) throws IOException {
-        // Reuse socket or create new? Assignment implies verify with GET
-        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-        lamportClock++;
-        out.println("GET /weather.json?id=" + stationId + " HTTP/1.1");
-        out.println("Lamport-Clock: " + lamportClock);
-        out.println();
-        String response = readResponse(socket);
-        long receivedClock = updateLamportClock(response);
-        lamportClock = Math.max(lamportClock, receivedClock) + 1;
-        int status = extractStatusCode(response);
-        if (status == 200) {
-            String body = parseBody(response);
-            WeatherData receivedData = WeatherData.fromJson(body);
-            if (receivedData.equals(sentData)) {
-                System.out.println("Verification successful.");
-            } else {
-                System.out.println("Verification failed.");
-            }
-        }
-    }
-
     private String readResponse(Socket socket) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         StringBuilder response = new StringBuilder();
@@ -162,13 +106,5 @@ public class ContentServer implements IContentServer {
             response.append(line).append("\n");
         }
         return response.toString();
-    }
-
-    private String parseBody(String response) {
-        int bodyStart = response.indexOf("\n\n");
-        if (bodyStart != -1) {
-            return response.substring(bodyStart + 2);
-        }
-        return "";
     }
 }

@@ -12,8 +12,20 @@ public class GETClient implements IGETClient {
     private static final ObjectMapper mapper = new ObjectMapper();
     private final ICLIParser cliParser = new CLIParser();
 
-    @Override
-    public void main(String[] args) {
+    public static void main(String[] args) {
+        GETClient client = new GETClient();
+        while (true) {
+            client.run(args);
+            try {  
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+    }
+
+    public void run(String[] args) {
         try {
             String serverUrl = cliParser.parseServerUrl(args);
             String stationId = cliParser.parseStationId(args);
@@ -51,6 +63,7 @@ public class GETClient implements IGETClient {
         }
         out.println("GET " + path + " HTTP/1.1");
         out.println("Host: " + cliParser.parseHost(serverUrl));
+        out.println("User-Agent: GETClient/1.0");
         out.println("Lamport-Clock: " + lamportClock);
         out.println();
     }

@@ -4,6 +4,11 @@ package assignment2;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 public class CLIParser implements ICLIParser {
     
     @Override 
@@ -30,6 +35,12 @@ public class CLIParser implements ICLIParser {
             throw new IllegalArgumentException("File path is required for ContentServer.");
         }
         return args[1];
+    }
+
+    public WeatherData readFromFile(String inputFile) throws Exception {
+        String json = Files.readString(Path.of(inputFile));
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(json, WeatherData.class);
     }
 
     @Override
