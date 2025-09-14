@@ -41,7 +41,7 @@ public class WeatherDataStore implements IWeatherDataStore {
         lock.lock();
         try {
             if (stationId == null) {
-                String result =  mapper.writeValueAsString(new ArrayList<>(stations.values()));
+                String result = mapper.writeValueAsString(new ArrayList<>(stations.values()));
                 System.out.println("getData(null) result: " + result);
                 return result;
             } else {
@@ -108,8 +108,6 @@ public class WeatherDataStore implements IWeatherDataStore {
         }
     }
 
-
-
     @Override
     public void recover() {
         lock.lock();
@@ -118,8 +116,17 @@ public class WeatherDataStore implements IWeatherDataStore {
             System.out.println("Recovering from " + DATA_FILE + ", exists: " + file.exists());
             if (file.exists()) {
                 Map<String, Object> root = mapper.readValue(file, Map.class);
-                stations.putAll((Map<String, IWeatherData>) root.get("stations"));
-                lastContacts.putAll((Map<String, Long>) root.get("lastContacts"));
+                Map<String, Object> rawStations = (Map<String, Object>) root.get("stations");
+                if (rawStations != null) {
+                    for (Map.Entry<String, Object> entry : rawStations.entrySet()) {
+                        WeatherData weatherData = mapper.convertValue(entry.getValue(), WeatherData.class);
+                        stations.put(entry.getKey(), weatherData);
+                    }
+                }
+                Map<String, Long> rawLastContacts = (Map<String, Long>) root.get("lastContacts");
+                if (rawLastContacts != null) {
+                    lastContacts.putAll(rawLastContacts);
+                }
             }
         } catch (IOException e) {
             System.err.println("Recover error: " + e.getMessage());

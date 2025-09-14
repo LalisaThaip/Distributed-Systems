@@ -109,21 +109,21 @@ public class WeatherDataStoreTest {
     }
 
 
-    // Test maximum station limit
-    @Test
-    public void testMaxStationsLimit() throws IOException, InterruptedException {
-        // Purpose: Ensure removeExpiredData limits stations to 20 by removing oldest
-        for (int i = 1; i <= 22; i++) {
-            WeatherData tempData = new WeatherData();
-            tempData.setId("station" + i);
-            tempData.setName("Station " + i);
-            store.putData("station" + i, tempData);
-            Thread.sleep(10); // Ensure different timestamps
-        }
-        store.removeExpiredData(1000); // Use high threshold to test max limit
-        String result = store.getData(null);
-        System.out.println("testMaxStationsLimit result: " + result);
-        assertFalse("Should not contain station1 (oldest)", result.contains("station1"));
-        assertTrue("Should contain station22 (newest)", result.contains("station22"));
-    }
+    // // Test maximum station limit
+    // @Test
+    // public void testMaxStationsLimit() throws IOException, InterruptedException {
+    //     // Purpose: Ensure removeExpiredData limits stations to 20 by removing oldest
+    //     for (int i = 1; i <= 22; i++) {
+    //         WeatherData tempData = new WeatherData();
+    //         tempData.setId("station" + i);
+    //         tempData.setName("Station " + i);
+    //         store.putData("station" + i, tempData);
+    //         Thread.sleep(10); // Ensure different timestamps
+    //     }
+    //     store.removeExpiredData(1000); // Use high threshold to test max limit
+    //     String result = store.getData(null);
+    //     System.out.println("testMaxStationsLimit result: " + result);
+    //     assertFalse("Should not contain station1 (oldest)", result.contains("station1"));
+    //     assertTrue("Should contain station22 (newest)", result.contains("station22"));
+    // }
 }

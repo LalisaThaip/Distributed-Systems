@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="assignment2.WeatherDataStoreTest" time="0.116" tests="6" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="17"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/Users/lalisa/Desktop/ds_repo2/Distributed-Systems/target/test-classes:/Users/lalisa/Desktop/ds_repo2/Distributed-Systems/target/classes:/Users/lalisa/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.17.2/jackson-databind-2.17.2.jar:/Users/lalisa/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.17.2/jackson-annotations-2.17.2.jar:/Users/lalisa/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.17.2/jackson-core-2.17.2.jar:/Users/lalisa/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/Users/lalisa/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/lalisa/.m2/repository/org/mockito/mockito-core/4.8.0/mockito-core-4.8.0.jar:/Users/lalisa/.m2/repository/net/bytebuddy/byte-buddy/1.12.14/byte-buddy-1.12.14.jar:/Users/lalisa/.m2/repository/net/bytebuddy/byte-buddy-agent/1.12.14/byte-buddy-agent-1.12.14.jar:/Users/lalisa/.m2/repository/org/objenesis/objenesis/3.2/objenesis-3.2.jar:"/>
+    <property name="java.vm.vendor" value="Homebrew"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://github.com/Homebrew/homebrew-core/issues"/>
+    <property name="user.timezone" value="Australia/Adelaide"/>
+    <property name="os.name" value="Mac OS X"/>
+    <property name="java.vm.specification.version" value="17"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.boot.library.path" value="/opt/homebrew/Cellar/openjdk@17/17.0.16/libexec/openjdk.jdk/Contents/Home/lib"/>
+    <property name="sun.java.command" value="/Users/lalisa/Desktop/ds_repo2/Distributed-Systems/target/surefire/surefirebooter-20250915064727946_3.jar /Users/lalisa/Desktop/ds_repo2/Distributed-Systems/target/surefire 2025-09-15T06-47-27_897-jvmRun1 surefire-20250915064727946_1tmp surefire_0-20250915064727946_2tmp"/>
+    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/Users/lalisa/Desktop/ds_repo2/Distributed-Systems/target/test-classes:/Users/lalisa/Desktop/ds_repo2/Distributed-Systems/target/classes:/Users/lalisa/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.17.2/jackson-databind-2.17.2.jar:/Users/lalisa/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.17.2/jackson-annotations-2.17.2.jar:/Users/lalisa/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.17.2/jackson-core-2.17.2.jar:/Users/lalisa/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/Users/lalisa/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/lalisa/.m2/repository/org/mockito/mockito-core/4.8.0/mockito-core-4.8.0.jar:/Users/lalisa/.m2/repository/net/bytebuddy/byte-buddy/1.12.14/byte-buddy-1.12.14.jar:/Users/lalisa/.m2/repository/net/bytebuddy/byte-buddy-agent/1.12.14/byte-buddy-agent-1.12.14.jar:/Users/lalisa/.m2/repository/org/objenesis/objenesis/3.2/objenesis-3.2.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/Users/lalisa"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2025-07-15"/>
+    <property name="java.home" value="/opt/homebrew/Cellar/openjdk@17/17.0.16/libexec/openjdk.jdk/Contents/Home"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/Users/lalisa/Desktop/ds_repo2/Distributed-Systems"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="surefire.real.class.path" value="/Users/lalisa/Desktop/ds_repo2/Distributed-Systems/target/surefire/surefirebooter-20250915064727946_3.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="java.runtime.version" value="17.0.16+0"/>
+    <property name="user.name" value="lalisa"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="26.0"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="java.vendor.version" value="Homebrew"/>
+    <property name="localRepository" value="/Users/lalisa/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://github.com/Homebrew/homebrew-core/issues"/>
+    <property name="java.io.tmpdir" value="/var/folders/7x/gzcsf6n5721dgpp8zrfctrlr0000gn/T/"/>
+    <property name="java.version" value="17.0.16"/>
+    <property name="user.dir" value="/Users/lalisa/Desktop/ds_repo2/Distributed-Systems"/>
+    <property name="os.arch" value="aarch64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/Users/lalisa/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="java.vendor" value="Homebrew"/>
+    <property name="java.vm.version" value="17.0.16+0"/>
+    <property name="java.specification.maintenance.version" value="1"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="java.class.version" value="61.0"/>
+  </properties>
+  <testcase name="testPersistData" classname="assignment2.WeatherDataStoreTest" time="0.001">
+    <system-out><![CDATA[Persisted to weather_data.temp.json
+Moved to weather_data.json
+testPersistData file exists: true
+testPersistData file content: {"lastContacts":{"station1":1757884668265},"stations":{"station1":{"id":"station1","name":"Station One","state":"CA","timeZone":null,"lat":0.0,"lon":0.0,"localDateTime":null,"localDateTimeFull":null,"airTemp":0.0,"apparentT":0.0,"cloud":null,"dewpt":0.0,"press":0.0,"relHum":0,"windDir":null,"windSpdKmh":0,"windSpdKt":0}}}
+]]></system-out>
+  </testcase>
+  <testcase name="testContainsKey" classname="assignment2.WeatherDataStoreTest" time="0.0">
+    <system-out><![CDATA[Persisted to weather_data.temp.json
+Moved to weather_data.json
+]]></system-out>
+  </testcase>
+  <testcase name="testGetAllStations" classname="assignment2.WeatherDataStoreTest" time="0.003">
+    <system-out><![CDATA[Persisted to weather_data.temp.json
+Moved to weather_data.json
+getData(null) result: [{"id":"station1","name":"Station One","state":"CA","timeZone":null,"lat":0.0,"lon":0.0,"localDateTime":null,"localDateTimeFull":null,"airTemp":0.0,"apparentT":0.0,"cloud":null,"dewpt":0.0,"press":0.0,"relHum":0,"windDir":null,"windSpdKmh":0,"windSpdKt":0}]
+testGetAllStations result: [{"id":"station1","name":"Station One","state":"CA","timeZone":null,"lat":0.0,"lon":0.0,"localDateTime":null,"localDateTimeFull":null,"airTemp":0.0,"apparentT":0.0,"cloud":null,"dewpt":0.0,"press":0.0,"relHum":0,"windDir":null,"windSpdKmh":0,"windSpdKt":0}]
+]]></system-out>
+  </testcase>
+  <testcase name="testRemoveExpiredData" classname="assignment2.WeatherDataStoreTest" time="0.102">
+    <system-out><![CDATA[Persisted to weather_data.temp.json
+Moved to weather_data.json
+Persisted to weather_data.temp.json
+Moved to weather_data.json
+getData(null) result: []
+testRemoveExpiredData result: []
+]]></system-out>
+  </testcase>
+  <testcase name="testRecoverData" classname="assignment2.WeatherDataStoreTest" time="0.008">
+    <system-out><![CDATA[Persisted to weather_data.temp.json
+Moved to weather_data.json
+Recovering from weather_data.json, exists: true
+testRecoverData result: {"id":"station1","name":"Station One","state":"CA","timeZone":null,"lat":0.0,"lon":0.0,"localDateTime":null,"localDateTimeFull":null,"airTemp":0.0,"apparentT":0.0,"cloud":null,"dewpt":0.0,"press":0.0,"relHum":0,"windDir":null,"windSpdKmh":0,"windSpdKt":0}
+]]></system-out>
+  </testcase>
+  <testcase name="testPutAndGetDataSingleStation" classname="assignment2.WeatherDataStoreTest" time="0.001">
+    <system-out><![CDATA[Persisted to weather_data.temp.json
+Moved to weather_data.json
+testPutAndGetDataSingleStation result: {"id":"station1","name":"Station One","state":"CA","timeZone":null,"lat":0.0,"lon":0.0,"localDateTime":null,"localDateTimeFull":null,"airTemp":0.0,"apparentT":0.0,"cloud":null,"dewpt":0.0,"press":0.0,"relHum":0,"windDir":null,"windSpdKmh":0,"windSpdKt":0}
+]]></system-out>
+  </testcase>
+</testsuite>
