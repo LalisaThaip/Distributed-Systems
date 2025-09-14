@@ -43,7 +43,6 @@ public class HttpReqParser implements IHttpReqParser {
     }
 }
 
-// Custom class for HttpRequest
 class HttpRequest {
     private final String method;
     private final String path;

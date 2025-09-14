@@ -25,6 +25,7 @@ public class GETClient implements IGETClient {
         }
     }
 
+    @Override
     public void run(String[] args) {
         try {
             String serverUrl = cliParser.parseServerUrl(args);

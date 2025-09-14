@@ -41,7 +41,9 @@ public class WeatherDataStore implements IWeatherDataStore {
         lock.lock();
         try {
             if (stationId == null) {
-                return mapper.writeValueAsString(new ArrayList<>(stations.values()));
+                String result =  mapper.writeValueAsString(new ArrayList<>(stations.values()));
+                System.out.println("getData(null) result: " + result);
+                return result;
             } else {
                 IWeatherData data = stations.get(stationId);
                 return data != null ? data.toJson() : "{}";
@@ -95,8 +97,11 @@ public class WeatherDataStore implements IWeatherDataStore {
             root.put("lastContacts", lastContacts);
             File temp = new File(TEMP_FILE);
             mapper.writeValue(temp, root);
+            System.out.println("Persisted to " + TEMP_FILE);
             Files.move(Paths.get(TEMP_FILE), Paths.get(DATA_FILE), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+            System.out.println("Moved to " + DATA_FILE);
         } catch (IOException e) {
+            System.err.println("Persist error: " + e.getMessage());
             e.printStackTrace();
         } finally {
             lock.unlock();
@@ -113,12 +118,14 @@ public class WeatherDataStore implements IWeatherDataStore {
         lock.lock();
         try {
             File file = new File(DATA_FILE);
+            System.out.println("Recovering from " + DATA_FILE + ", exists: " + file.exists());
             if (file.exists()) {
                 Map<String, Object> root = mapper.readValue(file, Map.class);
                 stations.putAll((Map<String, IWeatherData>) root.get("stations"));
                 lastContacts.putAll((Map<String, Long>) root.get("lastContacts"));
             }
         } catch (IOException e) {
+            System.err.println("Recover error: " + e.getMessage());
             e.printStackTrace();
         } finally {
             lock.unlock();

@@ -23,7 +23,7 @@ public class RequestHandler implements IRequestHandler {
     public void handleRequest(Socket clientSocket) throws IOException {
         HttpRequest request = reqParser.parseRequest(clientSocket.getInputStream());
         long receivedClock = request.getHeaders().containsKey("Lamport-Clock") ?
-                Long.parseLong(request.getHeaders().get("Lamport-Clock")) : 0;
+        Long.parseLong(request.getHeaders().get("Lamport-Clock")) : 0;
         lamportClock.update(receivedClock);
 
         String method = request.getMethod();

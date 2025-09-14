@@ -16,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class AggregationServer implements IAggregationServer {
     private static final int DEFAULT_PORT = 4567;
     private static final long EXPIRY_TIME = 30000; // 30 seconds for data expiry
-    private final ReentrantLock lock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock(); // For thread-safe operations
     private final ILamportClock lamportClock = new LamportClock();
     private final IWeatherDataStore dataStore = new WeatherDataStore();
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
@@ -43,6 +43,7 @@ public class AggregationServer implements IAggregationServer {
         }
     }
 
+    // Graceful shutdown of server and resources
     public void shutdown() {
         running = false;
         try {

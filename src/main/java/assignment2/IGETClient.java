@@ -13,6 +13,8 @@ import java.io.IOException;
 
 public interface IGETClient {
 
+    void run(String[] args);
+
     /**
      * Constructs and sends GET request with Lamport clock 
      * Initiates a GET request to the specified server URL for the given station ID
