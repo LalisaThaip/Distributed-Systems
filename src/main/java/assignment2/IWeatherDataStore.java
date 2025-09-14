@@ -41,12 +41,6 @@ public interface IWeatherDataStore {
     void persist();
 
     /**
-     * Logs a transaction for crash recovery (thread-safe).
-     * @param data Weather data to log.
-     */
-    void logTransaction(IWeatherData data);
-
-    /**
      * Recovers state from persistent storage (thread-safe).
      */
     void recover();

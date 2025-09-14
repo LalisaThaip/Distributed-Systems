@@ -108,17 +108,6 @@ public class WeatherDataStoreTest {
         assertFalse("Should not contain station2", store.containsKey("station2"));
     }
 
-    // Test logTransaction
-    @Test
-    public void testLogTransaction() {
-        // Purpose: Verify that logTransaction does not throw errors
-        try {
-            store.logTransaction(data);
-            assertTrue("logTransaction should complete without errors", true);
-        } catch (Exception e) {
-            fail("logTransaction should not throw an exception: " + e.getMessage());
-        }
-    }
 
     // Test maximum station limit
     @Test

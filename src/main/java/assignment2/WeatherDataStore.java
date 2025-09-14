@@ -108,10 +108,7 @@ public class WeatherDataStore implements IWeatherDataStore {
         }
     }
 
-    @Override
-    public void logTransaction(IWeatherData data) {
-        // For simplicity, persist acts as log; extend if needed for WAL
-    }
+
 
     @Override
     public void recover() {
